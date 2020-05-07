@@ -2,6 +2,7 @@
 import numpy as np
 import json
 import os
+from . import ptable
 from .logger import log, Mock
 try:
     import ase.io
