@@ -5,7 +5,6 @@ import os
 from .logger import log, Mock
 try:
     import ase.io
-    log << log.mb << "[readwrite: Using ASE]" << log.endl
 except ImportError:
     ase = Mock()
     ase.io = None
