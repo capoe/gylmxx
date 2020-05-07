@@ -105,7 +105,7 @@ class ExtendedXyz(object):
     def create_atom(self, ln):
         ln = ln.split()
         name = ln[0]
-        pos = map(float, ln[1:4])
+        pos = list(map(float, ln[1:4]))
         pos = np.array(pos)
         new_atom = ExtendedXyzAtom(name, pos)
         self.atoms.append(new_atom)
@@ -146,7 +146,7 @@ def write(
         ofs.write('%d\n' % (len(c)))
         for k in sorted(c.info.keys()):
             # int or float?
-            if type(c.info[k]) not in [ unicode, str ]:
+            if type(c.info[k]) not in { str }:
                 ofs.write('%s=%s ' % (k, c.info[k]))
             # String
             else:
@@ -154,7 +154,10 @@ def write(
         ofs.write('\n')
         for i in range(len(c)):
             ofs.write('%s %+1.4f %+1.4f %+1.4f\n' % (
-                c.get_chemical_symbols()[i], c.positions[i][0], c.positions[i][1], c.positions[i][2]))
+                c.get_chemical_symbols()[i], 
+                c.positions[i][0], 
+                c.positions[i][1], 
+                c.positions[i][2]))
     ofs.close()
     return
 
