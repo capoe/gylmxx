@@ -18,8 +18,8 @@ PYBIND11_MODULE(_gylm, m) {
     m.def("ylm", &_py_ylm, "Spherical harmonic series");
     py::class_<CellList>(m, "CellList")
         .def(py::init<py::array_t<double>, double>())
-        .def("get_neighbours_for_index", &CellList::getNeighboursForIndex)
-        .def("get_neighbours_for_position", &CellList::getNeighboursForPosition);
+        .def("getNeighboursForIndex", &CellList::getNeighboursForIndex)
+        .def("getNeighboursForPosition", &CellList::getNeighboursForPosition);
     py::class_<CellListResult>(m, "CellListResult")
         .def(py::init<>())
         .def_readonly("indices", &CellListResult::indices)

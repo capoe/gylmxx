@@ -1,5 +1,6 @@
 install(FILES 
     __init__.py 
+    connectivity.py
     logger.py
     gylm.py
     ptable.py

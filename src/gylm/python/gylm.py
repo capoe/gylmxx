@@ -49,6 +49,7 @@ class GylmCalculator(object):
         self.periodic = periodic
         self.normalize = normalize
         self.power = power
+        self.epsilon = 1e-10
     def getDim(self, with_power=None):
         if with_power is None: with_power = self.power
         return self.getChannelDim(with_power)*self.getNumberOfChannels(with_power)
@@ -64,14 +65,14 @@ class GylmCalculator(object):
             return self._Nt
     def getNumberofTypes(self):
         return len(self.types_z)
-    def evaluate_mp(self, systems, positions=None, 
-            power=True, 
-            normalize=True, 
-            verbose=False, 
+    def evaluate_mp(self, systems, positions=None,
+            power=True,
+            normalize=True,
+            verbose=False,
             procs=1):
         args = [ {
             "calc": self,
-            "system": systems[i], 
+            "system": systems[i],
             "positions": positions[i] if positions != None else None,
             "power": power,
             "normalize": normalize,
@@ -81,8 +82,8 @@ class GylmCalculator(object):
         X_list = pool.map(eval_single, args)
         pool.close()
         return X_list
-    def evaluate(self, system, positions=None, 
-            verbose=False, 
+    def evaluate(self, system, positions=None,
+            verbose=False,
             calc=None):
         if self.periodic:
             cell = system.get_cell()
@@ -102,13 +103,13 @@ class GylmCalculator(object):
             power=self.power,
             verbose=verbose)
         if self.normalize:
-            z = 1./np.sum(X**2, axis=1)**0.5
+            z = 1./(np.sum(X**2, axis=1)+self.epsilon)**0.5
             X = (X.T*z).T
         return X
-    def evaluateGylm(self, system, centers, 
-            gnl_centres, gnl_alphas, 
-            rcut, cutoff_padding, 
-            nmax, lmax, eta, atomic_numbers=None, 
+    def evaluateGylm(self, system, centers,
+            gnl_centres, gnl_alphas,
+            rcut, cutoff_padding,
+            nmax, lmax, eta, atomic_numbers=None,
             use_global_types=True, power=True, verbose=False):
         n_tgt = len(system)
         n_src = len(centers)
@@ -130,13 +131,13 @@ class GylmCalculator(object):
             shape = (n_centers, nmax*(lmax+1)*(lmax+1)*n_types)
         evaluate_gylm(coeffs, centers, positions,
             gnl_centres, gnl_alphas, Z_sorted, Z_sorted_global,
-            rcut, cutoff_padding, 
-            n_src, n_tgt, n_types, 
-            nmax, lmax, 
-            self.part_sigma, 
-            self.wconstant, 
-            self.wscale, 
-            self.wcentre, 
+            rcut, cutoff_padding,
+            n_src, n_tgt, n_types,
+            nmax, lmax,
+            self.part_sigma,
+            self.wconstant,
+            self.wscale,
+            self.wcentre,
             self.ldamp,
             power, verbose)
         coeffs = coeffs.reshape(shape)
@@ -165,4 +166,3 @@ class GylmCalculator(object):
         centres = np.linspace(rmin, rcut, nmax);
         alphas = np.ones_like(centres)/(2.*sigma**2)
         return centres, alphas
-
