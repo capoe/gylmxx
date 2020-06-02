@@ -19,6 +19,7 @@ limitations under the License.
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
 #include <string>
 #include <map>
 #include <set>
@@ -889,8 +890,8 @@ void getPNoCross(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lMax
 void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lMax){
   int NsTs100 = Ns*Ts*100;
   int Ns100 = Ns*100;
-  int NsNs = (Ns*(Ns+1))/2;
-  int NsNsLmax = NsNs*(lMax+1) ;
+  int NsNs = Ns*Ns;
+  int NsNsLmax = NsNs*(lMax+1);
   int NsNsLmaxTs = NsNsLmax*getCrosNum(Ts);
   int shiftN = 0;
   int shiftT = 0;
@@ -944,13 +945,13 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
 
   // SUM M's UP!
   double prel0 = PI*sqrt(8.0/(1.0));
-  for(int i = 0; i < Hs; i++){
+  for(int i = 0; i < Hs; i++){ // centers
     shiftT = 0;
-    for(int j = 0; j < Ts; j++){
-      for(int jd = j; jd < Ts; jd++){
+    for(int j = 0; j < Ts; j++){ // type1
+      for(int jd = j; jd < Ts; jd++){ // type2
         shiftN = 0;
         for(int k = 0; k < Ns; k++){
-          for(int kd = k; kd < Ns; kd++){
+          for(int kd = 0; kd < Ns; kd++){
             soapMat[NsNsLmaxTs*i + NsNsLmax*shiftT + 0 + shiftN] = prel0*(
                 cs0*Cnnd[NsTs100*i + Ns100*j + 0 + k]*Cnnd[NsTs100*i + Ns100*jd + 0 + kd]);
             shiftN++;
@@ -967,7 +968,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ NsNs + shiftN] = prel1*(
                   cs1*Cnnd[NsTs100*i + Ns100*j + 1*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 1*Ns + kd]
                   +cs2*Cnnd[NsTs100*i + Ns100*j + 2*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 2*Ns + kd]
@@ -987,7 +988,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 2*NsNs + shiftN] = prel2*(
                   cs3*Cnnd[NsTs100*i + Ns100*j + 4*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 4*Ns + kd]
                   +cs4*Cnnd[NsTs100*i + Ns100*j + 5*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 5*Ns + kd]
@@ -1009,7 +1010,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 3*NsNs + shiftN] = prel3*(
                   cs6*Cnnd[NsTs100*i + Ns100*j + 9*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 9*Ns + kd]
                   +cs7*Cnnd[NsTs100*i + Ns100*j + 10*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 10*Ns + kd]
@@ -1033,7 +1034,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 4*NsNs + shiftN] = prel4*(
                   cs10*Cnnd[NsTs100*i + Ns100*j + 16*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 16*Ns + kd]
                   +cs11*Cnnd[NsTs100*i + Ns100*j + 17*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 17*Ns + kd]
@@ -1059,7 +1060,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 5*NsNs + shiftN] = prel5*(
                   cs15*Cnnd[NsTs100*i + Ns100*j + 25*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 25*Ns + kd]
                   +cs16*Cnnd[NsTs100*i + Ns100*j + 26*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 26*Ns + kd]
@@ -1087,7 +1088,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 6*NsNs + shiftN] = prel6*(
                   cs21*Cnnd[NsTs100*i + Ns100*j + 36*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 36*Ns + kd]
                   +cs22*Cnnd[NsTs100*i + Ns100*j + 37*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 37*Ns + kd]
@@ -1117,7 +1118,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 7*NsNs + shiftN] = prel7*(
                   cs28*Cnnd[NsTs100*i + Ns100*j + 49*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 49*Ns + kd]
                   +cs29*Cnnd[NsTs100*i + Ns100*j + 50*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 50*Ns + kd]
@@ -1149,7 +1150,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 8*NsNs + shiftN] = prel8*(
                   cs36*Cnnd[NsTs100*i + Ns100*j + 64*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 64*Ns + kd]
                   +cs37*Cnnd[NsTs100*i + Ns100*j + 65*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 65*Ns + kd]
@@ -1183,7 +1184,7 @@ void getPCrossOver(double* soapMat, double* Cnnd, int Ns, int Ts, int Hs, int lM
         for(int jd = j; jd < Ts; jd++){
           shiftN = 0;
           for(int k = 0; k < Ns; k++){
-            for(int kd = k; kd < Ns; kd++){
+            for(int kd = 0; kd < Ns; kd++){
               soapMat[NsNsLmaxTs*i+NsNsLmax*shiftT+ 9*NsNs + shiftN] = prel9*(
                   cs45*Cnnd[NsTs100*i + Ns100*j + 81*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 81*Ns + kd]
                   +cs46*Cnnd[NsTs100*i + Ns100*j + 82*Ns + k]*Cnnd[NsTs100*i + Ns100*jd + 82*Ns + kd]
@@ -1225,10 +1226,10 @@ void soapGTO(
         double rCut, 
         double cutoffPadding, 
         int totalAN, 
-        int Nt, 
-        int Ns, 
+        int Nt, // n_types
+        int Ns, // n_radial
         int lMax, 
-        int Hs, 
+        int Hs, // n_heavy
         double eta, 
         bool crossover) {
 

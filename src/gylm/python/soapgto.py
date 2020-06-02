@@ -94,8 +94,14 @@ class SoapGtoCalculator(object):
         Z_sorted_global = self.types_z if use_global_types \
             else np.array(list(set(Z_sorted)))
         n_types = len(Z_sorted_global)
-        c = np.zeros(int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types + 1))/2)*n_centers, dtype=np.float64)
-        shape = (n_centers, int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types+1))/2))
+
+        #dim = int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types + 1))/2)
+        #c = np.zeros(dim*n_centers, dtype=np.float64)
+        #shape = (n_centers, dim)
+        dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
+        c = np.zeros(dim*n_centers, dtype=np.float64)
+        shape = (n_centers, dim)
+
         evaluate_soapgto(c, positions, centers, 
             alphas, betas, Z_sorted, Z_sorted_global,
             rcut, cutoff_padding, 
