@@ -34,6 +34,7 @@ class SoapGtoCalculator(object):
             average=False,
             sparse=False,
             normalize=False,
+            crossover=True,
             encoder=lambda s: ptable.lookup[s].z,
             decoder=lambda z: ptable.lookup[int(z)].name):
         self.types = types
@@ -49,6 +50,7 @@ class SoapGtoCalculator(object):
         self.periodic = periodic
         self._average = average
         self._normalize = normalize
+        self._crossover = crossover
     def getDim(self):
         return self.getChannelDim()*self.getNumberOfChannels()
     def getChannelDim(self):
@@ -98,7 +100,10 @@ class SoapGtoCalculator(object):
         #dim = int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types + 1))/2)
         #c = np.zeros(dim*n_centers, dtype=np.float64)
         #shape = (n_centers, dim)
-        dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
+        if self._crossover:
+            dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
+        else:
+            dim = int(nmax*(nmax+1)/2*(lmax+1)*n_types)
         c = np.zeros(dim*n_centers, dtype=np.float64)
         shape = (n_centers, dim)
 
@@ -106,7 +111,7 @@ class SoapGtoCalculator(object):
             alphas, betas, Z_sorted, Z_sorted_global,
             rcut, cutoff_padding, 
             n_atoms, n_types, 
-            nmax, lmax, n_centers, eta, True)
+            nmax, lmax, n_centers, eta, self._crossover)
         c = c.reshape(shape)
         return c
     def flattenPositions(self, system, atomic_numbers=None):
