@@ -99,9 +99,10 @@ class SoapGtoCalculator(object):
             else np.array(list(set(Z_sorted)))
         n_types = len(Z_sorted_global)
 
-        #dim = int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types + 1))/2)
-        #c = np.zeros(dim*n_centers, dtype=np.float64)
-        #shape = (n_centers, dim)
+        # >>> dim = int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types + 1))/2)
+        # >>> c = np.zeros(dim*n_centers, dtype=np.float64)
+        # >>> shape = (n_centers, dim)
+
         if self.power:
             if self._crossover:
                 dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
@@ -112,10 +113,6 @@ class SoapGtoCalculator(object):
         c = np.zeros(dim*n_centers, dtype=np.float64)
         shape = (n_centers, dim)
 
-        print(self.power)
-        print(dim)
-        input('...')
-
         evaluate_soapgto(c, positions, centers, 
             alphas, betas, Z_sorted, Z_sorted_global,
             rcut, cutoff_padding, 
@@ -123,6 +120,18 @@ class SoapGtoCalculator(object):
             nmax, lmax, n_centers, eta, self._crossover, 
             self.power)
         c = c.reshape(shape)
+
+        # TODO Check rotation invariance
+        # >>> if not self.power:
+        # >>>     dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
+        # >>>     X = np.zeros((n_centers, dim))
+        # >>>     evaluate_power(
+        # >>>         X, c, n_centers, n_types, nmax, lmax)
+        # >>>     print(X)
+        # >>>     print(X.dot(X.T))
+        # >>> print(self.power)
+        # >>> print(c)
+
         return c
     def flattenPositions(self, system, atomic_numbers=None):
         Z = system.get_atomic_numbers()
