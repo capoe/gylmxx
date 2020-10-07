@@ -48,6 +48,7 @@ void soapGTO(
     int lMax, 
     int Hs, 
     double eta, 
-    bool crossover);
+    bool crossover,
+    bool power);
 
 #endif

@@ -36,7 +36,8 @@ class SoapGtoCalculator(object):
             normalize=False,
             crossover=True,
             encoder=lambda s: ptable.lookup[s].z,
-            decoder=lambda z: ptable.lookup[int(z)].name):
+            decoder=lambda z: ptable.lookup[int(z)].name,
+            power=True):
         self.types = types
         self.types_z = np.array(sorted([ encoder(s) for s in self.types ]))
         self.types_elem = np.array([ decoder(z) for z in self.types_z ])
@@ -51,6 +52,7 @@ class SoapGtoCalculator(object):
         self._average = average
         self._normalize = normalize
         self._crossover = crossover
+        self.power = power
     def getDim(self):
         return self.getChannelDim()*self.getNumberOfChannels()
     def getChannelDim(self):
@@ -100,18 +102,26 @@ class SoapGtoCalculator(object):
         #dim = int((nmax*(nmax+1))/2)*(lmax+1)*int((n_types*(n_types + 1))/2)
         #c = np.zeros(dim*n_centers, dtype=np.float64)
         #shape = (n_centers, dim)
-        if self._crossover:
-            dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
+        if self.power:
+            if self._crossover:
+                dim = nmax*nmax*(lmax+1)*int((n_types*(n_types + 1))/2)
+            else:
+                dim = int(nmax*(nmax+1)/2*(lmax+1)*n_types)
         else:
-            dim = int(nmax*(nmax+1)/2*(lmax+1)*n_types)
+            dim = n_types*nmax*(lmax+1)**2
         c = np.zeros(dim*n_centers, dtype=np.float64)
         shape = (n_centers, dim)
+
+        print(self.power)
+        print(dim)
+        input('...')
 
         evaluate_soapgto(c, positions, centers, 
             alphas, betas, Z_sorted, Z_sorted_global,
             rcut, cutoff_padding, 
             n_atoms, n_types, 
-            nmax, lmax, n_centers, eta, self._crossover)
+            nmax, lmax, n_centers, eta, self._crossover, 
+            self.power)
         c = c.reshape(shape)
         return c
     def flattenPositions(self, system, atomic_numbers=None):

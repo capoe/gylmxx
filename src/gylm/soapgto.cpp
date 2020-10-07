@@ -1231,7 +1231,8 @@ void soapGTO(
         int lMax, 
         int Hs, // n_heavy
         double eta, 
-        bool crossover) {
+        bool crossover,
+        bool power) {
 
   auto atomicNumbers = atomicNumbersArr.unchecked<1>();
   auto atomicNumbersGlobal = atomicNumbersGlobalArr.unchecked<1>();
@@ -1419,11 +1420,17 @@ void soapGTO(
   free(bOa);
   free(aOa);
 
-  if (crossover) {
-    getPCrossOver(c, cnnd, Ns, Nt, Hs, lMax);
+  if (power) {
+      if (crossover) {
+        getPCrossOver(c, cnnd, Ns, Nt, Hs, lMax);
+      } else {
+        getPNoCross(c, cnnd, Ns, Nt, Hs, lMax);
+      };
   } else {
-    getPNoCross(c, cnnd, Ns, Nt, Hs, lMax);
-  };
+      for(int i = 0; i < (lMax+1)*(lMax+1)*Nt*Ns*Hs; i++) {
+        c[i] = cnnd[i];
+      }
+  }
   free(cnnd);
 
   return;

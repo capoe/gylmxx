@@ -68,7 +68,7 @@ void smooth_match(
     }
     if (verbose)
         std::cout << "Converged " << nx << "x" << ny << " in " 
-            << i_iter << " iterations" << std::endl;
+            << i_iter << " iterations" << std::flush;
 
     for (int i=0; i<nx; ++i) {
         for (int j=0; j<ny; ++j) {
