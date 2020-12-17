@@ -7,8 +7,12 @@ except ImportError:
 def check_available():
     return jax is not None
 
-
 def ylm(x, y, z):
+    lmax = 7
+    dim = (lmax+1)*(lmax+1)
+    epsilon = 1e-10
+    # ylm_out = jnp.zeros((x.shape[0], dim)) # NOTE Any point preallocating the output?
+
     radius_eps  = +1.00000000000e-10  # constexpr double radius_eps = 1e-10
     pi          = +3.14159265359e+00  # constexpr double pi = 3.141592653589793
     invs_pi     = +5.64189583548e-01  # constexpr double invs_pi = sqrt(1./pi)
@@ -55,25 +59,25 @@ def ylm(x, y, z):
     pre7_f      = +1.32298033090e+00  # constexpr double pre7_f = pre7_e*s_13*s_2
     pre7_g      = +3.53581366262e-01  # constexpr double pre7_g = pre7_f/s_2/s_7
 
-    lmax = 7
-    dim = (lmax+1)*(lmax+1)
-    #ylm_out = jnp.zeros((x.shape[0], dim))
-
-    r = jnp.sqrt(x**2 + y**2 + z**2) + 1e-10
+    # l = 0
+    r = jnp.sqrt(x**2 + y**2 + z**2) + epsilon
     zr = z/r
     xr = x/r
     yr = y/r
+    # l = 1
     a1r = xr
     a1i = -yr
     c1r = zr
     b1r = xr
     b1i = yr
+    # l = 2
     a2r = a1r*a1r - a1i*a1i
     a2i = 2*a1r*a1i
     c2r = c1r*c1r
     c2r_a = 3*c2r-1.
     b2r = b1r*b1r - b1i*b1i
     b2i = 2*b1r*b1i
+    # l = 3
     a3r = a2r*a1r - a2i*a1i
     a3i = a2r*a1i + a2i*a1r
     c3r = c2r*c1r
@@ -81,6 +85,7 @@ def ylm(x, y, z):
     c3r_b = 5*c3r-3*c1r
     b3r = b2r*b1r - b2i*b1i
     b3i = b2r*b1i + b2i*b1r
+    # l = 4
     a4r = a2r*a2r - a2i*a2i
     a4i = 2*a2r*a2i
     c4r = c2r*c2r
@@ -89,6 +94,7 @@ def ylm(x, y, z):
     c4r_2 = 7*c2r - 1.
     b4r = b2r*b2r - b2i*b2i
     b4i = 2*b2r*b2i
+    # l = 5
     a5r = a4r*a1r - a4i*a1i
     a5i = a4r*a1i + a4i*a1r
     c5r = c4r*c1r
@@ -98,6 +104,7 @@ def ylm(x, y, z):
     c5r_3 = 9*c2r - 1
     b5r = b4r*b1r - b4i*b1i
     b5i = b4r*b1i + b4i*b1r
+    # l = 6
     a6r = a3r*a3r - a3i*a3i
     a6i = 2*a3r*a3i
     c6r = c3r*c3r
@@ -108,7 +115,7 @@ def ylm(x, y, z):
     c6r_4 = 11*c2r - 1
     b6r = b3r*b3r - b3i*b3i
     b6i = 2*b3r*b3i
-
+    # l = 7
     a7r = a4r*a3r - a4i*a3i
     a7i = a4r*a3i + a4i*a3r
     c7r = c4r*c3r

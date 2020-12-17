@@ -62,12 +62,13 @@ class SoapGtoCalculator(object):
     def getNumberofTypes(self):
         return len(self.types_z)
     def evaluate(self, system, positions=None):
-        if self.periodic:
-            cell = system.get_cell()
         if positions is None:
             positions = system.get_positions()
         threshold = 0.001
         cutoff_padding = self._sigma*np.sqrt(-2*np.log(threshold))
+        if system.get_cell() is not None:
+            system = connectivity.pad_cell_to_cutoff(
+                system, self._rcut+cutoff_padding)
         X = self.evaluateGTO(
             system,
             positions,

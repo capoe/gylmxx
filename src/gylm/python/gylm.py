@@ -4,6 +4,7 @@ from scipy.special import gamma
 from scipy.linalg import sqrtm, inv
 from .._gylm import *
 from . import ptable
+from . import connectivity
 
 def eval_single(args):
     return args["calc"].evaluate(**args)
@@ -85,10 +86,10 @@ class GylmCalculator(object):
     def evaluate(self, system, positions=None,
             verbose=False,
             calc=None):
-        if self.periodic:
-            cell = system.get_cell()
         if positions is None:
             positions = system.get_positions()
+        if system.get_cell() is not None:
+            system = connectivity.pad_cell_to_cutoff(system, self._rcut)
         X = self.evaluateGylm(
             system,
             positions,
