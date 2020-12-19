@@ -21,6 +21,7 @@ from scipy.special import gamma
 from scipy.linalg import sqrtm, inv
 from .._gylm import *
 from . import ptable
+from . import connectivity
 
 class SoapGtoCalculator(object):
     def __init__(
