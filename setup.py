@@ -39,23 +39,29 @@ def make_cxx_extensions():
     ]
 
 def get_description():
-    return "This library implements Gnl-Ylm-type convolutions as a superset of SOAP, with additional control over spatial frequency damping and radial discounting",
+    return "This library implements Gnl-Ylm-type convolutions as a superset of SOAP, with additional control over spatial frequency damping and radial discounting"
 
 if __name__ == "__main__":
     setup(
         name="gylm",
         version="0.0.0",
+        author="capoe",
+        author_email="carl.poelking@floatlab.io",
         url="https://github.com/capoe/gylmxx",
         description="Implementation of Gnl-Ylm-type 3d convolutional descriptors",
         long_description=get_description(),
         packages=find_packages(),
         setup_requires=['pybind11>=2.4'],
         install_requires=['pybind11>=2.4', "numpy", "scipy", "scikit-learn"],
-        include_package_data=True,  # This ensures that files defined in MANIFEST.in are included
+        include_package_data=True,
         ext_modules=make_cxx_extensions(),
         license="Apache License 2.0",
         classifiers=[
-            # TODO
+            "Development Status :: 3 - Alpha",
+            "Intended Audience :: Science/Research",
+            "Topic :: Scientific/Engineering :: Physics",
+            "Topic :: Scientific/Engineering :: Chemistry",
+            "Topic :: Scientific/Engineering :: Artificial Intelligence"
         ],
         keywords="3d convolutional descriptors chemical machine learning",
         python_requires=">=3.7",
