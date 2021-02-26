@@ -12,7 +12,7 @@ function repair_wheel {
 }
 
 # Compile wheels
-for PYBIN in /opt/python/*3.7*/bin; do
+for PYBIN in /opt/python/*3*/bin; do
     "${PYBIN}/pip" install -r /io/devreqs.txt
     "${PYBIN}/pip" wheel /io/ --no-deps -w wheelhouse/
 done

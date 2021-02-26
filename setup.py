@@ -61,6 +61,6 @@ if __name__ == "__main__":
             "Topic :: Scientific/Engineering :: Artificial Intelligence"
         ],
         keywords="3d convolutional descriptors chemical machine learning",
-        python_requires=">=3.7",
+        python_requires=">=3.0",
     )
 
