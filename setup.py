@@ -1,9 +1,6 @@
 import sys
 import platform
 from setuptools import setup, find_packages, Extension
-from subprocess import getoutput
-from distutils.ccompiler import new_compiler
-from distutils.sysconfig import customize_compiler
 
 class get_pybind_include(object):
     def __init__(self, user=False):
