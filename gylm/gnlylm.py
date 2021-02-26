@@ -2,7 +2,7 @@ import numpy as np
 import multiprocessing as mp
 from scipy.special import gamma
 from scipy.linalg import sqrtm, inv
-from .._gylm import *
+from gylm._gylm import *
 from . import ptable
 from . import connectivity
 

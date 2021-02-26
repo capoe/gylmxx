@@ -1,4 +1,4 @@
-from .gylm import *
+from .gnlylm import *
 from .soapgto import *
 from .logger import log
 from . import readwrite as io
