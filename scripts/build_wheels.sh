@@ -1,5 +1,8 @@
 #!/bin/bash
 # Adapted from github.com/pypa/python-manylinux
+cd io
+echo "Current dir=$(pwd)"
+echo "Platform=${PLAT}"
 set -e -u -x
 
 function repair_wheel {
