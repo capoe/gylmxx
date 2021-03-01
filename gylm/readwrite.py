@@ -28,6 +28,42 @@ class ExtendedXyz(object):
         return self.symbols
     def get_atomic_numbers(self):
         return np.array([ ptable.lookup[s].z for s in self.get_chemical_symbols() ])
+    def get_cell(self):
+        if self.cell is None and "Lattice" in self.info:
+            self.cell = np.array(list(
+                map(float, self.info["Lattice"].split()))).reshape((3,3))
+            self.set_pbc()
+        return self.cell
+    def padToCutoff(self, r_cut):
+        cell = np.array(self.get_cell())
+        if cell is None: return self
+        # Calculate # replicates
+        u, v, w = cell[0], cell[1], cell[2]
+        a = np.cross(v, w, axis=0)
+        b = np.cross(w, u, axis=0)
+        c = np.cross(u, v, axis=0)
+        ua = np.dot(u, a) / np.dot(a,a) * a
+        vb = np.dot(v, b) / np.dot(b,b) * b
+        wc = np.dot(w, c) / np.dot(c,c) * c
+        proj = np.linalg.norm(np.array([ua, vb, wc]), axis=1)
+        nkl = np.ceil(r_cut/proj).astype('int')
+        # Replicate
+        n_atoms = len(self)
+        n_images = np.product(2*nkl + 1) 
+        positions_padded = np.tile(self.positions, (n_images, 1))
+        offset = 0
+        for i in np.append(np.arange(0, nkl[0]+1), np.arange(-nkl[0], 0)):
+            for j in np.append(np.arange(0, nkl[1]+1), np.arange(-nkl[1], 0)):
+                for k in np.append(np.arange(0, nkl[2]+1), np.arange(-nkl[2], 0)):
+                    ijk = np.array([i,j,k])
+                    positions_padded[offset:offset+n_atoms] += np.sum((cell.T*ijk).T, axis=0)
+                    offset += n_atoms
+        symbols_padded = np.tile(np.array(self.symbols), n_images)
+        config_padded = self.__class__(
+            positions=positions_padded,
+            symbols=symbols_padded,
+            cell=nkl*cell)
+        return config_padded
     def create(self, n_atoms, fs):
         # Parse header: key1="str1" key2=123 key3="another value" ...
         header = fs.readline().replace("\n", "")
