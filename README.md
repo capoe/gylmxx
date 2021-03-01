@@ -6,9 +6,6 @@
 
 ### Installation
 ```bash
-git clone https://github.com/capoe/gylmxx.git
-cd gylmxx
-./build.sh
-source gylm/GYLMRC
+pip install gylm
 ```
 
