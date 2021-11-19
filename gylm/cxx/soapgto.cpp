@@ -24,7 +24,7 @@ limitations under the License.
 #include <map>
 #include <set>
 #include "soapgto.hpp"
-#include "celllist.hpp"
+#include "gridsearch.hpp"
 
 #define PI2 9.86960440108936
 #define PI 3.14159265359
@@ -1332,7 +1332,7 @@ void soapGTO(
   for(int i = 0; i < 100*Nt*Ns*Hs; i++){cnnd[i] = 0.0;}
 
   // Initialize binning
-  CellList cellList(positions, rCut+cutoffPadding);
+  GridSearch cellList(positions, rCut+cutoffPadding);
 
   // Create a mapping between an atomic index and its internal index in the output
   map<int, int> ZIndexMap;
@@ -1354,7 +1354,7 @@ void soapGTO(
     double ix = Hpos[3*i];
     double iy = Hpos[3*i+1];
     double iz = Hpos[3*i+2];
-    CellListResult result = cellList.getNeighboursForPosition(ix, iy, iz);
+    GridSearchResult result = cellList.getNeighboursForPosition(ix, iy, iz);
     // Sort the neighbours by type
     map<int, vector<int>> atomicTypeMap;
     for (const int &idx : result.indices) {

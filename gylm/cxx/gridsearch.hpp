@@ -23,17 +23,17 @@ limitations under the License.
 namespace py = pybind11;
 using namespace std;
 
-struct CellListResult {
+struct GridSearchResult {
     vector<int> indices;
     vector<double> distances;
     vector<double> distancesSquared;
 };
 
-class CellList {
+class GridSearch {
     public:
-        CellList(py::array_t<double> positions, double cutoff);
-        CellListResult getNeighboursForPosition(const double x, const double y, const double z) const;
-        CellListResult getNeighboursForIndex(const int i) const;
+        GridSearch(py::array_t<double> positions, double cutoff);
+        GridSearchResult getNeighboursForPosition(const double x, const double y, const double z) const;
+        GridSearchResult getNeighboursForIndex(const int i) const;
 
     private:
         void init();

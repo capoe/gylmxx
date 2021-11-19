@@ -10,7 +10,7 @@
 #include <iomanip>
 #include "gylm.hpp"
 #include "ylm.hpp"
-#include "celllist.hpp"
+#include "gridsearch.hpp"
 
 // Unfortunately icc forbids use of math functions in constexpr
 constexpr double radial_epsilon  = +1.00000000000e-10; // constexpr double radial_epsilon = 1e-10;
@@ -261,7 +261,7 @@ void evaluate_gylm(
     }
 
     // Cell list
-    CellList cell_list(tgt_pos, r_cut);
+    GridSearch cell_list(tgt_pos, r_cut);
 
     // Type mapping
     auto tgt_types_list = tgt_types.unchecked<1>();
@@ -325,7 +325,7 @@ void evaluate_gylm(
             std::cout << std::endl;
             std::cout << "Src @ " << xi << " " << yi << " " << zi << std::endl;
         }
-        CellListResult nbs = cell_list.getNeighboursForPosition(xi, yi, zi);
+        GridSearchResult nbs = cell_list.getNeighboursForPosition(xi, yi, zi);
         map<int, vector<int>> nb_type_map;
         for (const int &j : nbs.indices) {
             int t = tgt_types_list(j);

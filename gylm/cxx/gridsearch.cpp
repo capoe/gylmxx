@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-#include "celllist.hpp"
+#include "gridsearch.hpp"
 #include <algorithm>
 #include <utility>
 #include <map>
@@ -22,7 +22,7 @@ limitations under the License.
 
 using namespace std;
 
-CellList::CellList(py::array_t<double> positions, double cutoff)
+GridSearch::GridSearch(py::array_t<double> positions, double cutoff)
     : positions(positions.unchecked<2>())
     , cutoff(cutoff)
     , cutoffSquared(cutoff*cutoff)
@@ -30,7 +30,7 @@ CellList::CellList(py::array_t<double> positions, double cutoff)
     this->init();
 }
 
-void CellList::init() {
+void GridSearch::init() {
     // Find cell limits
     this->xmin = this->xmax = this->positions(0, 0);
     this->ymin = this->ymax = this->positions(0, 1);
@@ -98,7 +98,7 @@ void CellList::init() {
     };
 }
 
-CellListResult CellList::getNeighboursForPosition(const double x, const double y, const double z) const
+GridSearchResult GridSearch::getNeighboursForPosition(const double x, const double y, const double z) const
 {
     // The indices of the neighbouring atoms
     vector<int> neighbours;
@@ -141,15 +141,15 @@ CellListResult CellList::getNeighboursForPosition(const double x, const double y
             }
         }
     }
-    return CellListResult{neighbours, distances, distancesSquared};
+    return GridSearchResult{neighbours, distances, distancesSquared};
 }
 
-CellListResult CellList::getNeighboursForIndex(const int idx) const
+GridSearchResult GridSearch::getNeighboursForIndex(const int idx) const
 {
     double x = this->positions(idx, 0);
     double y = this->positions(idx, 1);
     double z = this->positions(idx, 2);
-    CellListResult result = this->getNeighboursForPosition(x, y, z);
+    GridSearchResult result = this->getNeighboursForPosition(x, y, z);
 
     // Remove self from neighbours
     for (int i=0; i < result.indices.size(); ++i) {

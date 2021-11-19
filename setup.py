@@ -15,7 +15,7 @@ def make_cxx_extensions():
         "./gylm/cxx/kernel.cpp",
         "./gylm/cxx/ylm.cpp",
         "./gylm/cxx/bindings.cpp",
-        "./gylm/cxx/celllist.cpp",
+        "./gylm/cxx/gridsearch.cpp",
         "./gylm/cxx/soapgto.cpp"]
     incdirs = [
         "./gylm/cxx",
