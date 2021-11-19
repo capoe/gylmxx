@@ -88,7 +88,7 @@ class GylmCalculator(object):
             calc=None):
         if positions is None:
             positions = system.get_positions()
-        if system.get_cell() is not None:
+        if np.any(system.pbc) and system.get_cell() is not None:
             system = connectivity.pad_cell_to_cutoff(system, self._rcut)
         X = self.evaluateGylm(
             system,

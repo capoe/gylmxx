@@ -67,7 +67,7 @@ class SoapGtoCalculator(object):
             positions = system.get_positions()
         threshold = 0.001
         cutoff_padding = self._sigma*np.sqrt(-2*np.log(threshold))
-        if system.get_cell() is not None:
+        if np.any(system.pbc) and system.get_cell() is not None:
             system = connectivity.pad_cell_to_cutoff(
                 system, self._rcut+cutoff_padding)
         X = self.evaluateGTO(
